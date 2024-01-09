@@ -18,8 +18,8 @@ public class Grade {
     private Long id;
     private Double grade;
     @ManyToOne
-    @JoinColumn(name = "userId", referencedColumnName = "id")
-    private User user;
+    @JoinColumn(name = "studentId", referencedColumnName = "id")
+    private Student student;
     @ManyToOne
     @JoinColumn(name = "assignmentId", referencedColumnName = "id")
     private Assignment assignment;

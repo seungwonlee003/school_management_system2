@@ -54,9 +54,10 @@ public class AuthenticationService {
                             .build();
             user.setRoles(Collections.singletonList(Authority.builder().name("ROLE_USER").build()));
             userRepository.save(user);
+            // have logic where, based on the roll, student/teacher entity of the user will be created
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            throw new Exception("잘못된 요청입니다.");
+            throw new Exception();
         }
     }
 }
