@@ -19,9 +19,7 @@ public class AssignmentService {
 
     private final AuthService authService;
 
-    // student
-    public List<Assignment> getAllAssignmentsBySubject(Long subjectId) {
-       // checks if the user is enrolled in the subject
+    public List<Assignment> getAllAssignmentsOfCurrentUserBySubject(Long subjectId) {
         if(!authService.isStudentEnrolledInSubject(subjectId)){
            throw new RuntimeException();
        }
@@ -30,15 +28,13 @@ public class AssignmentService {
                 .toList();
     }
 
-    // student, teacher
-    public List<Assignment> getAllAssignmentsByUser(){
-        List<Subject> subjects = subjectService.getAllSubjectsByUser();
+    public List<Assignment> getAllAssignmentsOfCurrentUser(){
+        List<Subject> subjects = subjectService.getAllSubjectsOfCurrentUser();
         return subjects.stream()
                 .flatMap(subject -> assignmentRepository.findAllBySubjectId(subject.getId()).stream())
                 .toList();
     }
 
-    // teacher
     public void createAssignment(Assignment assignment){
         Teacher teacher = authService.getTeacher();
         if(authService.isTeacherEnrolledInSubject(assignment.getSubject().getId())) {
