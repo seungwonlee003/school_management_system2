@@ -3,9 +3,13 @@ package com.example.demo.service;
 import com.example.demo.model.Assignment;
 import com.example.demo.model.Grade;
 import com.example.demo.model.Student;
+import com.example.demo.model.Teacher;
 import com.example.demo.repository.AssignmentRepository;
 import com.example.demo.repository.GradeRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +25,7 @@ public class GradeService {
     // student
     public Grade getGradeOfCurrentUserByAssignment(Long assignmentId) {
         Assignment assignment = assignmentRepository.findById(assignmentId).orElseThrow(() -> new IllegalArgumentException());
-        if(!authService.isUserEnrolledInSubject(assignment.getSubject().getId())){
+        if (!authService.isUserEnrolledInSubject(assignment.getSubject().getId())) {
             throw new IllegalArgumentException();
         }
         Student currentStudent = authService.getStudent();
@@ -31,9 +35,11 @@ public class GradeService {
     }
 
     // student
-    public List<Grade> getAllGradesOfCurrentUser() {
+    public Page<Grade> getAllGradesOfCurrentUser(int offset, int pageSize, String sortBy) {
         Student student = authService.getStudent();
-        return gradeRepository.findAllByStudent(student);
+        Sort sort = Sort.by(sortBy);
+        PageRequest pageable = PageRequest.of(offset, pageSize, sort);
+        return gradeRepository.findAllByStudent(student, pageable);
     }
 
     // student
@@ -45,4 +51,19 @@ public class GradeService {
                 .toList();
     }
 
+    // teacher
+    public List<Grade> getAllGradesByAssignment(Long assignmentId) {
+        Teacher teacher = authService.getTeacher();
+        Assignment assignment = assignmentRepository.findById(assignmentId).orElseThrow(() -> new IllegalArgumentException());
+        if (!authService.isTeacherEnrolledInSubject(assignment.getSubject().getId())) {
+            throw new RuntimeException();
+        }
+        return gradeRepository.findAllByAssignment(assignment);
+    }
+
+    public void editGrade(Long gradeId, double gradeVal) {
+        Grade grade = gradeRepository.findById(gradeId).orElseThrow(() -> new IllegalArgumentException());
+        grade.setGrade(gradeVal);
+        gradeRepository.save(grade);
+    }
 }

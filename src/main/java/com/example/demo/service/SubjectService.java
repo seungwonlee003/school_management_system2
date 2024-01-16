@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.model.*;
+import com.example.demo.repository.SubjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +11,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SubjectService {
     private final AuthService authService;
+
+    private final SubjectRepository subjectRepository;
 
     public List<Subject> getAllSubjectsOfCurrentUser() {
         User user = authService.getCurrentUser();
@@ -30,5 +33,11 @@ public class SubjectService {
         }
     }
 
+    public void createSubject(Subject subject){
+        subjectRepository.save(subject);
+    }
 
+    public void deleteSubject(Long subjectId){
+        subjectRepository.deleteById(subjectId);
+    }
 }

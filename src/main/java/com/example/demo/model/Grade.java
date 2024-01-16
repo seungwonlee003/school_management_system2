@@ -16,7 +16,7 @@ public class Grade {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Double grade;
+    private double grade;
     @ManyToOne
     @JoinColumn(name = "studentId", referencedColumnName = "id")
     private Student student;
