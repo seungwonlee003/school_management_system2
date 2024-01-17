@@ -36,13 +36,13 @@ public class AuthService {
         User user = getCurrentUser();
         List<Authority> authorities = user.getRoles();
 
-        if (authorities.get(0).getName().equals("TEACHER")) {
+        if (authorities.get(0).getName().equals("ROLE_TEACHER")) {
             return getTeacher().getSubjects()
                     .stream()
                     .map(subject -> subject.getId())
                     .toList()
                     .contains(subjectId);
-        } else if (authorities.get(0).getName().equals("STUDENT")) {
+        } else if (authorities.get(0).getName().equals("ROLE_STUDENT")) {
             return getTeacher().getSubjects()
                     .stream()
                     .map(subject -> subject.getId())

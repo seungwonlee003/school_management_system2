@@ -24,9 +24,9 @@ public class SubjectService {
 
         String userRole = authorities.get(0).getName();
 
-        if ("TEACHER".equals(userRole)) {
+        if ("ROLE_TEACHER".equals(userRole)) {
             return authService.getTeacher().getSubjects().stream().toList();
-        } else if ("STUDENT".equals(userRole)) {
+        } else if ("ROLE_STUDENT".equals(userRole)) {
             return authService.getStudent().getSubjects().stream().toList();
         } else {
             throw new RuntimeException("Unexpected role");
