@@ -4,6 +4,7 @@ import com.example.demo.dto.LoginResponse;
 import com.example.demo.dto.SignRequest;
 import com.example.demo.model.Authority;
 import com.example.demo.model.User;
+import com.example.demo.repository.AuthorityRepository;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.security.JwtProvider;
 import com.example.demo.service.jwt.CustomUserDetailsService;
@@ -16,7 +17,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 
 @Service
 @RequiredArgsConstructor
@@ -31,6 +31,8 @@ public class AuthenticationService {
     private final UserRepository userRepository;
 
     private final PasswordEncoder passwordEncoder;
+
+    private final AuthorityRepository authorityRepository;
 
     public LoginResponse login(SignRequest request) throws Exception {
         try {
@@ -52,8 +54,11 @@ public class AuthenticationService {
         try {
             User user = User.builder().name(request.getName()).password(passwordEncoder.encode(request.getPassword()))
                             .build();
-            user.setRoles(Collections.singletonList(Authority.builder().name("ROLE_USER").build()));
             userRepository.save(user);
+            Authority authority = new Authority();
+            authority.setName("ROLE_ADMIN");
+            authority.setUser(user);
+            authorityRepository.save(authority);
             // have logic where, based on the roll, student/teacher entity of the user will be created
         } catch (Exception e) {
             System.out.println(e.getMessage());

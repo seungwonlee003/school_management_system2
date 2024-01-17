@@ -17,20 +17,20 @@ import java.util.List;
 public class SubjectController {
     private final SubjectService subjectService;
 
-    @PreAuthorize("hasAnyRole('STUDENT', 'TEACHER')")
+    @PreAuthorize("hasAnyRole('ROLE_STUDENT', 'ROLE_TEACHER')")
     @GetMapping("/of-user")
     public ResponseEntity<List<Subject>> getAllSubjectsOfCurrentUser() {
         return new ResponseEntity<>(subjectService.getAllSubjectsOfCurrentUser(), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<Void> createSubject(@RequestBody Subject subject) {
         subjectService.createSubject(subject);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/delete/{subjectId}")
     public ResponseEntity<Void> deleteSubject(@PathVariable Long subjectId) {
         subjectService.deleteSubject(subjectId);

@@ -9,15 +9,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/assignment")
 public class AssignmentController {
     private final AssignmentService assignmentService;
 
-    @PreAuthorize("hasRole('STUDENT', 'TEACHER')")
+    @PreAuthorize("hasAnyRole('ROLE_STUDENT', 'ROLE_TEACHER')")
     @GetMapping("/of-user")
     public ResponseEntity<Page<Assignment>> getAllAssignmentsOfCurrentUser(@RequestParam(defaultValue = "0") int offset,
                                                                        @RequestParam(defaultValue = "3") int pageSize,
@@ -25,7 +23,7 @@ public class AssignmentController {
         return new ResponseEntity<>(assignmentService.getAllAssignmentsOfCurrentUser(offset, pageSize, sortBy), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyRole('STUDENT', 'TEACHER')")
+    @PreAuthorize("hasAnyRole('ROLE_STUDENT', 'ROLE_TEACHER')")
     @GetMapping("/by-subject/{subjectId}")
     public ResponseEntity<Page<Assignment>> getAllAssignmentsOfCurrentUserBySubject(@RequestParam(defaultValue = "0") int offset,
                                                                                     @RequestParam(defaultValue = "5") int pageSize,
@@ -34,14 +32,14 @@ public class AssignmentController {
         return new ResponseEntity<>(assignmentService.getAllAssignmentsOfCurrentUserBySubject(offset, pageSize, sortBy, subjectId), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyRole('TEACHER')")
+    @PreAuthorize("hasAnyRole('ROLE_TEACHER')")
     @PostMapping("/create")
     public ResponseEntity<Void> createAssignment(@RequestBody Assignment assignment){
         assignmentService.createAssignment(assignment);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasRole('TEACHER')")
+    @PreAuthorize("hasRole('ROLE_TEACHER')")
     @DeleteMapping("/delete")
     public ResponseEntity<Void> deleteAssignment(@PathVariable Long assignmentId) {
         assignmentService.deleteAssignment(assignmentId);

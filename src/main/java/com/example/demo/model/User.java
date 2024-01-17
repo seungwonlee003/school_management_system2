@@ -7,7 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 @Builder
 public class User {
     @Id

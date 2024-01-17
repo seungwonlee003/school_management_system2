@@ -13,7 +13,6 @@ import lombok.*;
 public class Authority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
     private Long id;
     private String name;
     @JoinColumn(name = "user_id")

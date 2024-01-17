@@ -17,13 +17,13 @@ import java.util.List;
 public class GradeController {
     private final GradeService gradeService;
 
-    @PreAuthorize("hasRole('STUDENT')")
+    @PreAuthorize("hasRole('ROLE_STUDENT')")
     @GetMapping("/by-assignment/{assignmentId}")
     public ResponseEntity<Grade> getGradeOfCurrentUserByAssignment(@PathVariable Long assignmentId) {
         return new ResponseEntity<>(gradeService.getGradeOfCurrentUserByAssignment(assignmentId), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('STUDENT')")
+    @PreAuthorize("hasRole('ROLE_STUDENT')")
     @GetMapping("/of-user")
     public ResponseEntity<Page<Grade>> getAllGradesOfCurrentUser(@RequestParam(defaultValue = "0") int offset,
                                                                  @RequestParam(defaultValue = "3") int pageSize,
@@ -31,19 +31,19 @@ public class GradeController {
         return new ResponseEntity<>(gradeService.getAllGradesOfCurrentUser(offset, pageSize, sortBy), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('STUDENT')")
+    @PreAuthorize("hasRole('ROLE_STUDENT')")
     @GetMapping("/subject/{subjectId}")
     public ResponseEntity<List<Grade>> getAllGradesOfCurrentUserBySubject(@PathVariable Long subjectId) {
         return new ResponseEntity<>(gradeService.getAllGradesOfCurrentUserBySubject(subjectId), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('TEACHER')")
+    @PreAuthorize("hasRole('ROLE_TEACHER')")
     @GetMapping("/by-assignment-all/{assignmentId}")
     public ResponseEntity<List<Grade>> getAllGradesByAssignment(@PathVariable Long assignmentId) {
         return new ResponseEntity<>(gradeService.getAllGradesByAssignment(assignmentId), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole('TEACHER')")
+    @PreAuthorize("hasRole('ROLE_TEACHER')")
     @PatchMapping("/edit/{gradeId}")
     public ResponseEntity<Void> editGrade(@PathVariable Long gradeId, @RequestBody double grade) {
         gradeService.editGrade(gradeId, grade);
