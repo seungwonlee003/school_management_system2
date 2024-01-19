@@ -43,7 +43,7 @@ public class AuthService {
                     .toList()
                     .contains(subjectId);
         } else if (authorities.get(0).getName().equals("ROLE_STUDENT")) {
-            return getTeacher().getSubjects()
+            return getStudent().getSubjects()
                     .stream()
                     .map(subject -> subject.getId())
                     .toList()

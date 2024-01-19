@@ -1,5 +1,8 @@
 package com.example.demo.service;
 
+import com.example.demo.exception.AssignmentNotFoundException;
+import com.example.demo.exception.GradeNotFoundException;
+import com.example.demo.exception.UserNotEnrolledException;
 import com.example.demo.model.Assignment;
 import com.example.demo.model.Grade;
 import com.example.demo.model.Student;
@@ -24,14 +27,14 @@ public class GradeService {
 
     // student
     public Grade getGradeOfCurrentUserByAssignment(Long assignmentId) {
-        Assignment assignment = assignmentRepository.findById(assignmentId).orElseThrow(() -> new IllegalArgumentException());
+        Student student = authService.getStudent();
+        Assignment assignment = assignmentRepository.findById(assignmentId)
+                .orElseThrow(() -> new AssignmentNotFoundException(assignmentId));
         if (!authService.isUserEnrolledInSubject(assignment.getSubject().getId())) {
-            throw new IllegalArgumentException();
+            throw new UserNotEnrolledException("Student");
         }
-        Student currentStudent = authService.getStudent();
-
-        return gradeRepository.findByAssignmentAndStudent(assignment, currentStudent)
-                .orElseThrow(() -> new IllegalArgumentException());
+        return gradeRepository.findByAssignmentAndStudent(assignment, student)
+                .orElseThrow(() -> new GradeNotFoundException());
     }
 
     // student
@@ -44,25 +47,27 @@ public class GradeService {
 
     // student
     public List<Grade> getAllGradesOfCurrentUserBySubject(Long subjectId) {
+        Student student = authService.getStudent();
         List<Assignment> assignments = assignmentService.getAllAssignmentsOfCurrentUserBySubject(subjectId);
 
         return assignments.stream()
-                .flatMap(assignment -> gradeRepository.findByAssignment(assignment).stream())
+                .flatMap(assignment -> gradeRepository.findByAssignmentAndStudent(assignment, student).stream())
                 .toList();
     }
 
     // teacher
     public List<Grade> getAllGradesByAssignment(Long assignmentId) {
         Teacher teacher = authService.getTeacher();
-        Assignment assignment = assignmentRepository.findById(assignmentId).orElseThrow(() -> new IllegalArgumentException());
+        Assignment assignment = assignmentRepository.findById(assignmentId).orElseThrow(() -> new AssignmentNotFoundException(assignmentId));
         if (!authService.isTeacherEnrolledInSubject(assignment.getSubject().getId())) {
-            throw new RuntimeException();
+            throw new UserNotEnrolledException("Teacher");
         }
         return gradeRepository.findAllByAssignment(assignment);
     }
 
+    // teacher
     public void editGrade(Long gradeId, double gradeVal) {
-        Grade grade = gradeRepository.findById(gradeId).orElseThrow(() -> new IllegalArgumentException());
+        Grade grade = gradeRepository.findById(gradeId).orElseThrow(GradeNotFoundException::new);
         grade.setGrade(gradeVal);
         gradeRepository.save(grade);
     }

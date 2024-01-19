@@ -11,22 +11,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SubjectService {
     private final AuthService authService;
-
     private final SubjectRepository subjectRepository;
 
+    // only one role is assumed for a user
     public List<Subject> getAllSubjectsOfCurrentUser() {
         User user = authService.getCurrentUser();
-        List<Authority> authorities = user.getRoles();
+        List<String> authorities = user.getRoles().stream().map(Authority::getName).toList();
 
-        if (authorities.isEmpty()) {
-            throw new IllegalArgumentException();
-        }
-
-        String userRole = authorities.get(0).getName();
-
-        if ("ROLE_TEACHER".equals(userRole)) {
+        if (authorities.contains("ROLE_TEACHER")) {
             return authService.getTeacher().getSubjects().stream().toList();
-        } else if ("ROLE_STUDENT".equals(userRole)) {
+        } else if (authorities.contains("ROLE_STUDENT")) {
             return authService.getStudent().getSubjects().stream().toList();
         } else {
             throw new RuntimeException("Unexpected role");

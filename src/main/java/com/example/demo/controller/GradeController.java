@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.EditGradeDto;
 import com.example.demo.model.Grade;
 import com.example.demo.service.GradeService;
 import lombok.RequiredArgsConstructor;
@@ -23,11 +24,12 @@ public class GradeController {
         return new ResponseEntity<>(gradeService.getGradeOfCurrentUserByAssignment(assignmentId), HttpStatus.OK);
     }
 
+    // fix default value of id
     @PreAuthorize("hasRole('ROLE_STUDENT')")
     @GetMapping("/of-user")
     public ResponseEntity<Page<Grade>> getAllGradesOfCurrentUser(@RequestParam(defaultValue = "0") int offset,
                                                                  @RequestParam(defaultValue = "3") int pageSize,
-                                                                 @RequestParam(defaultValue = "deadline") String sortBy) {
+                                                                 @RequestParam(defaultValue = "id") String sortBy) {
         return new ResponseEntity<>(gradeService.getAllGradesOfCurrentUser(offset, pageSize, sortBy), HttpStatus.OK);
     }
 
@@ -43,10 +45,11 @@ public class GradeController {
         return new ResponseEntity<>(gradeService.getAllGradesByAssignment(assignmentId), HttpStatus.OK);
     }
 
+    // somehow @RequestBody Double grade does not work so the editGradeDto was created instead for better json parsing
     @PreAuthorize("hasRole('ROLE_TEACHER')")
     @PatchMapping("/edit/{gradeId}")
-    public ResponseEntity<Void> editGrade(@PathVariable Long gradeId, @RequestBody double grade) {
-        gradeService.editGrade(gradeId, grade);
+    public ResponseEntity<Void> editGrade(@PathVariable Long gradeId, @RequestBody EditGradeDto editGradeDto) {
+        gradeService.editGrade(gradeId, editGradeDto.getGrade());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

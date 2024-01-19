@@ -23,11 +23,17 @@ public class SubjectController {
         return new ResponseEntity<>(subjectService.getAllSubjectsOfCurrentUser(), HttpStatus.OK);
     }
 
+    // associate subject with teacher
+
+
+    // associate subject with students
+
+
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<Void> createSubject(@RequestBody Subject subject) {
         subjectService.createSubject(subject);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")

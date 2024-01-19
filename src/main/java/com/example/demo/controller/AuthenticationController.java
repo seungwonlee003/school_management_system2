@@ -24,6 +24,6 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<Void> register(@RequestBody SignRequest request) throws Exception {
         authenticationService.register(request);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

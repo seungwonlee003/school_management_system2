@@ -17,7 +17,7 @@ import java.util.function.Function;
 @Component
 public class JwtProvider {
     public static final String SECRET = "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
-    private static final long EXPIRATION_TIME_MILLISECONDS = 1000 * 60 * 30; // 30 minutes
+    private static final long EXPIRATION_TIME_MILLISECONDS = 1000 * 60 * 30 * 4; // 30 * 4 minutes
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);

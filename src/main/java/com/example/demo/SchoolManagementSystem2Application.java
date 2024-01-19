@@ -10,6 +10,5 @@ public class SchoolManagementSystem2Application {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SchoolManagementSystem2Application.class, args);
-
 	}
 }
