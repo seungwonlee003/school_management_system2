@@ -33,5 +33,4 @@ public class Student{
 
     private int gradeLevel;
     private double gpa;
-
 }
