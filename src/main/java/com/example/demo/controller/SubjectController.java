@@ -18,7 +18,6 @@ import java.util.Set;
 public class SubjectController {
     private final SubjectService subjectService;
 
-    @PreAuthorize("hasAnyRole('ROLE_STUDENT', 'ROLE_TEACHER')")
     @GetMapping("/of-user")
     public ResponseEntity<List<Subject>> getAllSubjectsOfCurrentUser() {
         return new ResponseEntity<>(subjectService.getAllSubjectsOfCurrentUser(), HttpStatus.OK);
@@ -39,14 +38,14 @@ public class SubjectController {
     }
 
     // find all students by subject accessible to teachers only
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_TEACHER')")
     @PostMapping("/create")
     public ResponseEntity<Void> createSubject(@RequestBody Subject subject) {
         subjectService.createSubject(subject);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_TEACHER')")
     @DeleteMapping("/delete/{subjectId}")
     public ResponseEntity<Void> deleteSubject(@PathVariable Long subjectId) {
         subjectService.deleteSubject(subjectId);

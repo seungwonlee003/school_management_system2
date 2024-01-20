@@ -31,14 +31,12 @@ public class PostController {
         return new ResponseEntity<>(postService.getAllPostsOfCurrentUserBySubject(offset, pageSize, sortBy, subjectId), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_STUDENT', 'ROLE_TEACHER')")
     @PostMapping("/create")
     public ResponseEntity<Void> createPost(@RequestBody PostRequest postRequest){
         postService.createPost(postRequest);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_STUDENT', 'ROLE_TEACHER')")
     @DeleteMapping("/delete")
     public ResponseEntity<Void> deletePost(@PathVariable Long postId) {
         postService.deletePost(postId);

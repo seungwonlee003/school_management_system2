@@ -23,7 +23,6 @@ public class PostService {
     private final AuthService authService;
     private final PostRepository postRepository;
     private final SubjectRepository subjectRepository;
-    private final UserRepository userRepository;
     public Page<Post> getAllPostsOfCurrentUser(int offset, int pageSize, String sortBy){
         List<Subject> subjects = subjectService.getAllSubjectsOfCurrentUser();
 

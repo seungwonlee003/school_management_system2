@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.EditGradeDto;
+import com.example.demo.dto.EditGradeRequest;
 import com.example.demo.model.Grade;
 import com.example.demo.service.GradeService;
 import lombok.RequiredArgsConstructor;
@@ -48,8 +48,8 @@ public class GradeController {
     // somehow @RequestBody Double grade does not work so the editGradeDto was created instead for better json parsing
     @PreAuthorize("hasRole('ROLE_TEACHER')")
     @PatchMapping("/edit/{gradeId}")
-    public ResponseEntity<Void> editGrade(@PathVariable Long gradeId, @RequestBody EditGradeDto editGradeDto) {
-        gradeService.editGrade(gradeId, editGradeDto.getGrade());
+    public ResponseEntity<Void> editGrade(@PathVariable Long gradeId, @RequestBody EditGradeRequest editGradeRequest) {
+        gradeService.editGrade(gradeId, editGradeRequest.getGrade());
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
